@@ -9,3 +9,4 @@ description = "Personal encrypted password manager"
 
 [dependencies]
 clap = { version = "3.2.16", features = ["derive"] }
+home = "0.5.3"
