@@ -1,19 +1,35 @@
 mod pm;
 
-use clap::Parser;
+use clap::{Parser, Subcommand};
 
-#[derive(Parser, Debug)]
+#[derive(Parser)]
 #[clap(author, version, about, long_about = None)]
-struct Args {
-  /// Get a value
-  #[clap(short, long)]
-  get: String,
+struct Cli {
+  #[clap(subcommand)]
+  command: Option<Commands>,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+  /// Set a value on the password manager
+  Set {
+    /// Key of the value to store
+    #[clap(value_parser)]
+    key: String,
+
+    /// Value to store
+    #[clap(value_parser)]
+    value: String,
+  }
 }
 
 fn main() {
-  let args = Args::parse();
+  let cli = Cli::parse();
 
-  let value = pm::get(args.get);
-
-  println!("The value is {}", value);
+  match cli.command {
+    Some(Commands::Set { key, value }) => {
+      pm::set(key, value);
+    }
+    None => {}
+  }
 }

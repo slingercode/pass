@@ -1,3 +1,3 @@
-pub fn get(value: String) -> String {
-  return value;
+pub fn set(key: String, value: String) {
+  println!("Key: {}, Value: {}", key, value);
 }
