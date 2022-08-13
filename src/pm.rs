@@ -5,9 +5,8 @@ pub fn init() {
     Some(home) => {
       let path = &home.join(".pm");
 
-      if let Err(e) = create_dir(path) {
-        println!("Could not create .pm directory: {}", e);
-        return;
+      if let Err(error) = create_dir(path) {
+        panic!("Could not create .pm directory: {}", error);
       }
       
       println!("Initializated in path {}", path.display());

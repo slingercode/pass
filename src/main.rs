@@ -1,42 +1,13 @@
+mod cli;
 mod pm;
 
-use clap::{Parser, Subcommand};
-
-#[derive(Parser)]
-#[clap(author, version, about, long_about = None)]
-struct Cli {
-  #[clap(subcommand)]
-  command: Option<Commands>,
-}
-
-#[derive(Subcommand)]
-enum Commands {
-  /// Init the local pm instance
-  Init {},
-
-  /// Set a value on the password manager
-  Set {
-    /// Key of the value to store
-    #[clap(value_parser)]
-    key: String,
-
-    /// Value to store
-    #[clap(value_parser)]
-    value: String,
-  },
-
-  /// Get a value
-  Get {
-    /// Key of the value to obtain
-    #[clap(value_parser)]
-    key: String,
-  }
-}
+use clap::Parser;
+use cli::{Cli, Commands};
 
 fn main() {
-  let cli = Cli::parse();
+  let instance = Cli::parse();
 
-  match cli.command {
+  match instance.command {
     Some(Commands::Init {}) => {
       pm::init();
     }
