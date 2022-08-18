@@ -1,32 +1,32 @@
-use std::fs::{create_dir, self};
+use crate::dir::{generate_dir, generate_path, read_file, verify_file, write_file};
 
 pub fn init() {
-  match home::home_dir() {
-    Some(home) => {
-      let path = &home.join(".pm");
-
-      if let Err(error) = create_dir(path) {
-        panic!("Could not create .pm directory: {}", error);
-      }
-      
-      println!("Initializated in path {}", path.display());
-    }
-    None => { panic!("Imposible to get your home directory") }
-  }
+    generate_dir();
 }
 
 pub fn set(key: String, value: String) {
-  if let Some(home) = home::home_dir() {
-    let path = &home.join(".pm").join(key);
+    let path = generate_path(key).unwrap();
+    println!("{}", path.display());
 
-    if let Err(error) = fs::write(path, value) {
-      panic!("{}", error);
+    if verify_file(&path) {
+        println!("File already exists");
+        return;
     }
 
-    println!("Document created!");
-  }
+    // TODO: Encrypt data
+
+    write_file(&path, value).unwrap();
+    println!("Password stored");
 }
 
 pub fn get(key: String) -> String {
-  key
+    let path = generate_path(key).unwrap();
+
+    if let Some(value) = read_file(&path) {
+        return value;
+    }
+
+    // TODO: Decrypt data
+
+    return String::from("");
 }
